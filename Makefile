@@ -1,15 +1,33 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -std=c11 $(shell sdl2-config --cflags)
-LIBS = $(shell sdl2-config --libs)
+LDLIBS = $(shell sdl2-config --libs) -lSDL2_ttf -lm
 
-TARGET = juego.o
-SRC = src/main.c
+TARGET = juego
 
-all:
-	$(CC) $(CFLAGS) $(SRC) -o $(TARGET) $(LIBS)
+SRC = \
+	src/main.c \
+	src/scenes/menu.c \
+	src/scenes/game.c \
+	src/scenes/gameover.c \
+	src/scenes/win.c \
+	src/scripts/player.c \
+	src/scripts/enemy.c \
+	src/scripts/bullet.c
 
-run: all
+OBJ = $(SRC:.c=.o)
+
+all: $(TARGET)
+
+$(TARGET): $(OBJ)
+	$(CC) $(OBJ) -o $@ $(LDLIBS)
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+run: $(TARGET)
 	./$(TARGET)
 
 clean:
-	rm -f $(TARGET)
+	rm -f $(TARGET) $(OBJ)
+
+.PHONY: all run clean
