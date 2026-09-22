@@ -89,6 +89,12 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
+    if (TTF_Init() == -1) {
+        fprintf(stderr, "TTF_Init failed: %s\n", TTF_GetError());
+        SDL_Quit();
+        return 1;
+    }
+
     Engine engine = {0};
     engine.loop = true;
     engine.scene = CF_MENU;
@@ -116,6 +122,22 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "SDL_CreateRenderer failed: %s\n", SDL_GetError());
         SDL_DestroyWindow(engine.window);
         SDL_Quit();
+        return 1;
+    }
+
+    engine.font = TTF_OpenFont(
+        "assets/fonts/dejavu/DejaVuSans-Bold.ttf",
+        42
+    );
+
+    if (engine.font == NULL) {
+        fprintf(stderr, "TTF_OpenFont failed: %s\n", TTF_GetError());
+
+        SDL_DestroyRenderer(engine.renderer);
+        SDL_DestroyWindow(engine.window);
+        TTF_Quit();
+        SDL_Quit();
+
         return 1;
     }
 

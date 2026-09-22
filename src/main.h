@@ -2,6 +2,7 @@
 #define MAIN_H
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <stdbool.h>
 
 #define SCREEN_W 800
@@ -37,7 +38,9 @@ typedef struct {
 typedef struct {
     SDL_Window   *window;
     SDL_Renderer *renderer;
+    TTF_Font     *font;	
     SDL_Texture  *circle_tex; /* pre-rendered white circle, tinted per-draw */
+    
     bool          loop;
     SceneType     scene;
     SceneType     prev_scene;
